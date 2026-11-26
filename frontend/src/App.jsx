@@ -16,10 +16,10 @@ export default function App() {
       setUser(getUser());
     };
 
-    window.addEventListener("storage", updateUser);
+    window.addEventListener("authChanged", updateUser);
 
     return () => {
-      window.removeEventListener("storage", updateUser);
+      window.removeEventListener("authChanged", updateUser);
     };
   }, []);
 

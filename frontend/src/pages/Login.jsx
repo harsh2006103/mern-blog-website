@@ -31,6 +31,7 @@ function Login() {
       const response = await api.post("/auth/login", userData);
 
       saveLogin(response.data);
+      window.dispatchEvent(new Event("authChanged"));
 
       if (response.data.role === "admin") {
         navigate("/dashboard", { replace: true });

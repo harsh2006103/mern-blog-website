@@ -1,4 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiFeather,
@@ -10,13 +12,24 @@ import {
 import { getUser, logout } from "../api.js";
 
 function Navbar() {
-  const user = getUser();
+  const [user, setUser] = useState(getUser());
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Logout Function
+  useEffect(() => {
+    const updateUser = () => setUser(getUser());
+
+    window.addEventListener("authChanged", updateUser);
+
+    return () => {
+      window.removeEventListener("authChanged", updateUser);
+    };
+  }, []);
+
   function handleLogout() {
     logout();
-    window.location.href = "/";
+    window.dispatchEvent(new Event("authChanged"));
+    navigate("/", { replace: true });
   }
 
   return (
@@ -27,12 +40,11 @@ function Navbar() {
       className="sticky top-0 z-50 bg-[#FBFBFD]/80 backdrop-blur-xl border-b border-zinc-200/70"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        {/* Brand Logo */}
         <Link
           to="/"
           className="group inline-flex items-center gap-2.5 text-zinc-950 font-bold text-lg tracking-tight"
         >
-          <span className="w-9 h-9 rounded-xl bg-zinc-950 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+          <span className="w-9 h-9 rounded-xl bg-zinc-950 text-white flex items-center justify-center shadow-xs">
             <FiFeather size={17} />
           </span>
           <span>
@@ -40,66 +52,53 @@ function Navbar() {
           </span>
         </Link>
 
-        {/* Right Navigation Items */}
         <div className="flex items-center gap-2 sm:gap-3">
           {user ? (
             <>
-              {/* User Greeting Pill */}
-              <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-zinc-200/80 text-xs font-medium text-zinc-700 shadow-2xs">
-                <span className="w-5 h-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 text-white text-[10px] font-bold flex items-center justify-center uppercase">
+              <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-zinc-200/80 text-xs font-medium text-zinc-700">
+                <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center uppercase">
                   {user.name?.charAt(0) || "U"}
                 </span>
                 <span>Hi, {user.name}</span>
               </div>
 
-              {/* Admin Dashboard Link */}
               {user.role === "admin" && (
                 <Link
                   to="/dashboard"
-                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium ${
                     location.pathname === "/dashboard"
-                      ? "bg-zinc-950 text-white shadow-xs"
-                      : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800"
+                      ? "bg-zinc-950 text-white"
+                      : "bg-zinc-100 text-zinc-800"
                   }`}
                 >
                   <FiGrid size={14} />
-                  <span>Dashboard</span>
+                  Dashboard
                 </Link>
               )}
 
-              {/* Logout Button */}
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-rose-50 text-rose-600 border border-rose-200/60 cursor-pointer"
               >
                 <FiLogOut size={14} />
-                <span>Logout</span>
+                Logout
               </motion.button>
             </>
           ) : (
             <>
-              {/* Login Link */}
-              <Link
-                to="/login"
-                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
-                  location.pathname === "/login"
-                    ? "text-blue-600 bg-blue-50/70"
-                    : "text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100/80"
-                }`}
-              >
-                <FiLogIn size={14} />
-                <span>Login</span>
+              <Link to="/login">
+                <FiLogIn size={14} className="inline mr-1" />
+                Login
               </Link>
 
-              {/* Register Primary Pill Button */}
               <motion.div whileTap={{ scale: 0.96 }}>
                 <Link
                   to="/register"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-zinc-950 hover:bg-zinc-800 text-white shadow-xs transition-all"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-zinc-950 text-white"
                 >
                   <FiUserPlus size={14} />
-                  <span>Register</span>
+                  Register
                 </Link>
               </motion.div>
             </>
