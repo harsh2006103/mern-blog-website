@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+}
+
+/* Main Container */
+.container {
+  width: 100%;
+  max-width: none;
+  margin: 20px 0;
+  padding: 0 24px;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1f2937;
+  padding: 14px 24px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 14px;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input */
+input,
+textarea,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+
+/* Button */
+.btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.red {
+  background: #dc2626;
+}
+
+.btn-outline {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Blog Media */
+.media {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Comments */
+.comments {
+  margin-top: 14px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* Row */
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Error */
+.error {
+  color: red;
+}
