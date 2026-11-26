@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Home from "../src/pages/Home.jsx";
@@ -8,21 +9,39 @@ import BlogPage from "../src/pages/BlogPage.jsx";
 import { getUser } from "./api.js";
 
 export default function App() {
-  const user = getUser();
+  const [user, setUser] = useState(getUser());
+
+  useEffect(() => {
+    const updateUser = () => {
+      setUser(getUser());
+    };
+
+    window.addEventListener("storage", updateUser);
+
+    return () => {
+      window.removeEventListener("storage", updateUser);
+    };
+  }, []);
 
   return (
     <>
       <Navbar />
+
       <div className="w-full min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog/:id" element={<BlogPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route
             path="/dashboard"
             element={
-              user?.role === "admin" ? <Dashboard /> : <Navigate to="/login" />
+              user?.role === "admin" ? (
+                <Dashboard />
+              ) : (
+                <Navigate to="/login" replace />
+              )
             }
           />
         </Routes>
