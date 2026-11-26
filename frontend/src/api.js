@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "https://mern-blog-backend-ten-blue.vercel.app/api",
 });
-
 console.log("API URL:", api.defaults.baseURL);
 
 api.interceptors.request.use((config) => {
