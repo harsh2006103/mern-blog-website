@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiMail,
@@ -12,6 +12,8 @@ import {
 import api, { saveLogin } from "../api.js";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,12 +29,13 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", userData);
+
       saveLogin(response.data);
 
       if (response.data.role === "admin") {
-        window.location.href = "/dashboard";
+        navigate("/dashboard", { replace: true });
       } else {
-        window.location.href = "/";
+        navigate("/", { replace: true });
       }
     } catch (err) {
       if (err.response && err.response.data.message) {
@@ -63,15 +66,17 @@ function Login() {
           >
             <FiLogIn size={20} />
           </motion.div>
+
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950">
             Welcome back
           </h2>
+
           <p className="text-sm text-zinc-500 mt-1.5">
             Sign in to your MyBlog account to continue.
           </p>
         </div>
 
-        {/* Animated Error Alert */}
+        {/* Error Alert */}
         {error && (
           <motion.div
             initial={{ opacity: 0, x: -8 }}
@@ -90,8 +95,10 @@ function Login() {
             <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1.5">
               Email Address
             </label>
+
             <div className="relative group">
               <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-blue-600 transition-colors" />
+
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -108,8 +115,10 @@ function Login() {
             <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-1.5">
               Password
             </label>
+
             <div className="relative group">
               <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-blue-600 transition-colors" />
+
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
@@ -118,6 +127,7 @@ function Login() {
                 required
                 className="w-full pl-10 pr-11 py-3 rounded-xl bg-zinc-50/70 border border-zinc-200/90 text-sm text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -147,7 +157,7 @@ function Login() {
           </motion.button>
         </form>
 
-        {/* Footer Register Link */}
+        {/* Footer */}
         <div className="mt-7 pt-6 border-t border-zinc-200/70 text-center">
           <p className="text-sm text-zinc-500">
             New user?{" "}
